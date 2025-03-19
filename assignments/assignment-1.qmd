@@ -4,12 +4,19 @@ title: "Assignment 1"
 
 # Assignment 1
 
-```{r}
-1 + 1
+```{}
 ```
 
 My first assignment has two parts.
 
-## (a)
+## (a) Brief Summary of Baykal
+
+He is really friendly and shared his own thoughts about this type of engagements with students and how he would wanted some to introduce what his job life looks like.
+
+In the first section he talked about his experiences after the graduation. Eve though he graduated from Industrial engineering he started to work in the software industry. In his current job he is working in the sales of the developed OR system but he is more technical side of this sales business.
+
+In the second part he discussed what is OR is in the modern technology. The general industry is now focuses more on the AI and Machine Learning rather than the OR itself. Now we can more see the analytics instead of the OR/optimization. He mentioned that the analytics can be observed on 4 main fields. The most basic one is the descriptive analytics which just shows what the data is, second is diagnostic analytics which analyses the root causes of the problems, predictive analytics focuses on the future possibilities and lastly the prescriptive analytics focuses on the action of the resolving the root causes. He also mentioned the tools that can be used for each analytic analyzes. These analytic method can be used together (also this is encouraged). Using all these method together will help to analyze problem, find the root cause and find a solution.
+
+Lastly he mentioned how we can project-ify these methods and how to understand the KPI's. He also encouraged us the deploy the projects we have. This will show what is missing with the project what can be done to improve. The user is the king approach will help with our final outcome.
 
 ## (b)
