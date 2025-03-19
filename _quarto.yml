@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "[Student xxxx]'s Analytics Lab"
+  title: "Enzel Ege Sarı's Analytics Lab"
   navbar:
     search: true
     left:
@@ -39,7 +39,7 @@ website:
   page-navigation: true
   back-to-top-navigation: true
   page-footer:
-    center: "Hacettepe IE - EMU660 - Spring 2024" 
+    center: "Hacettepe IE - EMU660 - Spring 2025" 
     border: true
 format:
   html:

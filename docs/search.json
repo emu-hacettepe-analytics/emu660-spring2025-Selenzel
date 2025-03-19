@@ -1,17 +1,10 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Welcome to My Analytics Lab",
-    "section": "",
-    "text": "Hello!! My name is xxx xxxx.\nThis is my personal webpage.\nPlease stay tuned to follow my works on data analytics, blog posts, and more.\n\n\n\n Back to top"
-  },
-  {
     "objectID": "project.html",
     "href": "project.html",
     "title": "Project X",
     "section": "",
-    "text": "Welcome to my project page.\nKeep an eye on this space to stay updated with my project activities.\n(The titles below are provided as examples; please feel free to adjust them as necessary.)"
+    "text": "Welcome to my/our project page.\nKeep an eye on this space to stay updated with my project activities.\n(The titles below are provided as examples; please feel free to adjust them as necessary.)"
   },
   {
     "objectID": "project.html#data-source",
@@ -70,16 +63,6 @@
     "text": "3.4 Results\nxxxxxx"
   },
   {
-    "objectID": "assignments.html",
-    "href": "assignments.html",
-    "title": "My Assignments",
-    "section": "",
-    "text": "On this page, I showcase the assignment I conducted for the [term and year, e.g. Spring 2024] EMU660 Decision Making with Analytics course.\nPlease use left menu to navigate through my assignments.\n\n\n\n Back to top",
-    "crumbs": [
-      "My Assignments"
-    ]
-  },
-  {
     "objectID": "about.html#employements",
     "href": "about.html#employements",
     "title": "About Me",
@@ -94,20 +77,6 @@
     "text": "Internships\n\nFirm aaa, position xx, year xxx\nFirm bbb, position yyy, year yyy"
   },
   {
-    "objectID": "posts.html",
-    "href": "posts.html",
-    "title": "My Blog",
-    "section": "",
-    "text": "This page is under construction.\n\n\n\n Back to top"
-  },
-  {
-    "objectID": "docs/assignments/assignment-1.html",
-    "href": "docs/assignments/assignment-1.html",
-    "title": "Assignment 1",
-    "section": "",
-    "text": "1 + 1\n\n[1] 2\n\n\nMy first assignment has two parts."
-  },
-  {
     "objectID": "assignments/assignment-1.html",
     "href": "assignments/assignment-1.html",
     "title": "Assignment 1",
@@ -115,6 +84,16 @@
     "text": "1 + 1\n\n[1] 2\n\n\nMy first assignment has two parts.",
     "crumbs": [
       "Assignment 1"
+    ]
+  },
+  {
+    "objectID": "assignments.html",
+    "href": "assignments.html",
+    "title": "My Assignments",
+    "section": "",
+    "text": "On this page, I showcase the assignment I conducted for the [term and year, e.g. Spring 2024-2025] EMU660 Decision Making with Analytics course.\nPlease use left menu to navigate through my assignments.\n\n\n\n Back to top",
+    "crumbs": [
+      "My Assignments"
     ]
   },
   {
@@ -126,5 +105,19 @@
     "crumbs": [
       "Assignment 2"
     ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to My Analytics Lab",
+    "section": "",
+    "text": "Hello!! My name is Enzel Ege Sarı\nThis is my personal webpage.\nPlease stay tuned to follow my works on data analytics, blog posts, and more.\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "posts.html",
+    "href": "posts.html",
+    "title": "My Blog",
+    "section": "",
+    "text": "This page is under construction.\n\n\n\n Back to top"
   }
 ]
