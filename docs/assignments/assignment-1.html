@@ -213,8 +213,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#assignment-1" id="toc-assignment-1" class="nav-link active" data-scroll-target="#assignment-1">Assignment 1</a>
   <ul class="collapse">
-  <li><a href="#a" id="toc-a" class="nav-link" data-scroll-target="#a">(a)</a></li>
-  <li><a href="#b" id="toc-b" class="nav-link" data-scroll-target="#b">(b)</a></li>
+  <li><a href="#a-brief-summary-of-baykal" id="toc-a-brief-summary-of-baykal" class="nav-link" data-scroll-target="#a-brief-summary-of-baykal">(a) Brief Summary of Baykal</a></li>
+  <li><a href="#b-a-basic-computation-using-mtcars" id="toc-b-a-basic-computation-using-mtcars" class="nav-link" data-scroll-target="#b-a-basic-computation-using-mtcars">(b) A Basic Computation Using “mtcars”</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -247,18 +247,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="assignment-1" class="level1">
 <h1>Assignment 1</h1>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
-</div>
-</div>
+<pre><code></code></pre>
 <p>My first assignment has two parts.</p>
-<section id="a" class="level2">
-<h2 class="anchored" data-anchor-id="a">(a)</h2>
+<section id="a-brief-summary-of-baykal" class="level2">
+<h2 class="anchored" data-anchor-id="a-brief-summary-of-baykal">(a) Brief Summary of Baykal</h2>
+<p>He is really friendly and shared his own thoughts about this type of engagements with students and how he would wanted some to introduce what his job life looks like.</p>
+<p>In the first section he talked about his experiences after the graduation. Eve though he graduated from Industrial engineering he started to work in the software industry. In his current job he is working in the sales of the developed OR system but he is more technical side of this sales business.</p>
+<p>In the second part he discussed what is OR is in the modern technology. The general industry is now focuses more on the AI and Machine Learning rather than the OR itself. Now we can more see the analytics instead of the OR/optimization. He mentioned that the analytics can be observed on 4 main fields. The most basic one is the descriptive analytics which just shows what the data is, second is diagnostic analytics which analyses the root causes of the problems, predictive analytics focuses on the future possibilities and lastly the prescriptive analytics focuses on the action of the resolving the root causes. He also mentioned the tools that can be used for each analytic analyzes. These analytic method can be used together (also this is encouraged). Using all these method together will help to analyze problem, find the root cause and find a solution.</p>
+<p>Lastly he mentioned how we can project-ify these methods and how to understand the KPI’s. He also encouraged us the deploy the projects we have. This will show what is missing with the project what can be done to improve. The user is the king approach will help with our final outcome.</p>
 </section>
-<section id="b" class="level2">
-<h2 class="anchored" data-anchor-id="b">(b)</h2>
+<section id="b-a-basic-computation-using-mtcars" class="level2">
+<h2 class="anchored" data-anchor-id="b-a-basic-computation-using-mtcars">(b) A Basic Computation Using “mtcars”</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>compute_stats <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">Mean =</span> <span class="fu">mean</span>(x), <span class="at">Median =</span> <span class="fu">median</span>(x), <span class="at">Variance=</span><span class="fu">var</span>(x), <span class="at">InterQuartileRange=</span><span class="fu">IQR</span>(x), </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">Minimum =</span> <span class="fu">min</span>(x),<span class="at">Maximum =</span> <span class="fu">max</span>(x))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">sapply</span>(mtcars,compute_stats),<span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>compute_stats <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">Mean =</span> <span class="fu">mean</span>(x), <span class="at">Median =</span> <span class="fu">median</span>(x), <span class="at">Variance=</span><span class="fu">var</span>(x), <span class="at">InterQuartileRange=</span><span class="fu">IQR</span>(x), <span class="at">Minimum =</span> <span class="fu">min</span>(x), </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">Maximum =</span> <span class="fu">max</span>(x))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">sapply</span>(mtcars,compute_stats),<span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   mpg      cyl      disp     hp       drat      wt      
+Mean               20.09062 6.1875   230.7219 146.6875 3.596563  3.21725 
+Median             19.2     6        196.3    123      3.695     3.325   
+Variance           36.3241  3.189516 15360.8  4700.867 0.2858814 0.957379
+InterQuartileRange 7.375    4        205.175  83.5     0.84      1.02875 
+Minimum            10.4     4        71.1     52       2.76      1.513   
+Maximum            33.9     8        472      335      4.93      5.424   
+                   qsec     vs        am        gear      carb    
+Mean               17.84875 0.4375    0.40625   3.6875    2.8125  
+Median             17.71    0         0         4         2       
+Variance           3.193166 0.2540323 0.2489919 0.5443548 2.608871
+InterQuartileRange 2.0075   1         1         1         2       
+Minimum            14.5     0         0         3         1       
+Maximum            22.9     1         1         5         8       </code></pre>
+</div>
+</div>
+<p>##(c)</p>
 
 
 </section>

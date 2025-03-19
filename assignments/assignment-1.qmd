@@ -4,7 +4,7 @@ title: "Assignment 1"
 
 # Assignment 1
 
-```{}
+```         
 ```
 
 My first assignment has two parts.
@@ -19,4 +19,22 @@ In the second part he discussed what is OR is in the modern technology. The gene
 
 Lastly he mentioned how we can project-ify these methods and how to understand the KPI's. He also encouraged us the deploy the projects we have. This will show what is missing with the project what can be done to improve. The user is the king approach will help with our final outcome.
 
-## (b)
+## (b) A Basic Computation Using "mtcars"
+
+``` r
+compute_stats <- function(x){
+  list(Mean = mean(x), Median = median(x), Variance=var(x), InterQuartileRange=IQR(x), 
+       Minimum = min(x),Maximum = max(x))
+}
+head(sapply(mtcars,compute_stats),100)
+```
+
+```{r}
+compute_stats <- function(x){
+  list(Mean = mean(x), Median = median(x), Variance=var(x), InterQuartileRange=IQR(x), Minimum = min(x), 
+            Maximum = max(x))
+}
+head(sapply(mtcars,compute_stats),100)
+```
+
+##(c)
