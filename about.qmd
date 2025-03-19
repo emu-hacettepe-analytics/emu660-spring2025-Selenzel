@@ -3,38 +3,43 @@ title: "About Me"
 sidebar: false 
 ---
 
-![](assets/images/vesikalik.jpeg){fig-align="center"}
+![](images/1670511897993.jpeg){fig-align="center" width="195"}
 
 # Education
 
--   B.S., ................................., ....................................University, Turkey, 20xx - 20xx.
--   M.S., Industrial Engineering, Hacettepe University, Turkey, 20xx - ongoing.
--   Ph.D.., Industrial Engineering, Hacettepe University, Turkey, 20xx - ongoing.
+-   B.S., Industrial Engineering, Çankaya University, Turkey, 2016 - 2020.
+
+-   B.S., Computer Engineering, Çankaya University, Turkey, 2018 - 2021.
+
+-   M.S., Industrial Engineering, Hacettepe University, Turkey, 2025 - ongoing.
 
 # Work Experience
 
-## Employements
+## Employments
 
-1.  Firm xxx, position xx, year xxx
+1.  UPS, Industrial Engineering Specialist,2021
 
-2.  Firm yyy, position yyy, year yyy
+2.  UPS, Senior Industrial Engineering Specialist,2022
+
+3.  UPS, Senior Industrial Engineering Specialist for TRMEA Cluster,2023
+
+4.  UPS, Operation Excellence Supervisor,2024
 
 ## Internships
 
-1.  Firm aaa, position xx, year xxx
+1.  TUSAŞ, Candidate Engineer,2018-2020
 
-2.  Firm bbb, position yyy, year yyy
+2.  EnerjiSA, BA Intern, 2020
 
 # Projects
 
-1.  TUBİTAK 1001..........................
-
-# Publications
-
-1.  Dasdemir, E., Batta, R., Koksalan, M., Tezcaner Ozturk, D. (2022) “UAV Routing for Reconnaissance Mission: A Multi-Objective Orienteering Problem with Time-Dependent Prizes and Multiple Connections”, Computers & Operations Research, 145: 105882.
+1.  Inventory Tracking and Control System Creation
+2.  Recommender System for Book, Movies and Music
 
 # Competencies
 
-R, Quarto, Git, Python
+R, Quarto, Git, Python, C#, C, C++, Java, PowerBI, Tableau
 
 # Hobbies
+
+Dancing, Drawing, Basically anything that is related with the creativity.
