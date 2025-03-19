@@ -9,7 +9,7 @@ website:
     left:
       - text: Home
         href: index.qmd
-      - text: About Me
+      - text: Hey, it's me!
         href: about.qmd
       - text: My Posts
         href: posts.qmd
@@ -22,11 +22,9 @@ website:
             
     tools:
       - icon: github
-        href: https://twitter.com
-      - icon: twitter
-        href: https://twitter.com
+        href: https://github.com/Selenzel
       - icon: linkedin
-        href: https://linkedin.com
+        href: https://www.linkedin.com/in/enzel-ege-sari/
 
   sidebar:
     - title: "Assignments"
