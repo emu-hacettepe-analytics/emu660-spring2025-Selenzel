@@ -1,16 +1,12 @@
 ---
-title: "Project X"
+title: "The Impact of Covid-19 on Türkiye"
 ---
-
-Welcome to my/our project page.
-
-Keep an eye on this space to stay updated with my project activities.
-
-(The titles below are provided as examples; please feel free to adjust them as necessary.)
 
 # 1. Project Overview and Scope
 
-xxxxxx
+The Pandemic has had profound effects on the society and economy worldwide. It can be said that with the pandemic our lives had changed significantly and maybe some can not even remember what the life was like before pandemic. This had positive and negative impacts on the countries. This project investigates such impacts with the scope of Türkiye. The Turkish Statistical Institute (TUIK) databases will be used during this analysis of the Türkiye's situation regarding to the impact of Covid-19 on Türkiye. The main objective is to understand the reasons and structural changes that might have happens after the Covid-19 by comparing the pre and post pandemic periods.
+
+This project will mainly focuses on the population growth, birth and death rates, martial behaviors employment situations, trading activities. The focus will be on 3 periods 2018-2019 the pre-pandemic period, 2020 - 2022 pandemic period and lastly 2023-2024 post-pandemic period. Even though there is multiple years data on the TUIK's database i narrowed the years to these fundamental 7 years to avoid any seasonality of the previous years recession.
 
 # 2. Data
 
