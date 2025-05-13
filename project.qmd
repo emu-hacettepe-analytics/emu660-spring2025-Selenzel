@@ -10,117 +10,159 @@ This project will mainly focuses on the population growth, birth and death rates
 
 # 2. Data
 
-The data sets that are used are taken from the TUIK. The below is the details of the such structure of these data sets.
+The data sets that are used are from the TUIK. The below is the details of the such structure of these data sets. Also, We need to add a new column to each database since we want the analysis to be focused on 3 time periods.
+
+*-\> Here i will identify the libraries and the structure of the columns to be added later on.*
 
 ```{r}
-#| include: false
+
 #Getting the libraries needed
 library(tidyverse)
 library(readxl)
 library(lubridate)
 library(ggplot2)
+
+#structuring the Columns to include the new periods
+add_covid_period <- function(df) {
+  df %>% mutate(CovidPeriod = case_when(
+    Year %in% 2018:2019 ~ "Pre-COVID",
+    Year %in% 2020:2022 ~ "During COVID",
+    Year %in% 2023:2024 ~ "Post-COVID",
+    TRUE ~ NA_character_
+  ))
+}
 ```
 
-**1- Population Data**
+### **1- Population Data**
 
 The population data will be used to identify the population trends, detect if there is a slowdown of population growths during or after the Covid-19.
+
+*-\>Here i will import the population data then add the new predefined column and show what the dataset looks like*
 
 ```{r}
 #| echo: false
 population_data <- read_excel("Data/population.xls")
+population_data <- add_covid_period(population_data)
 head(population_data)
 
 ```
 
-**2- Death Statistics**
-
-The death is an important factor to understand the affects of the Covid-19 to understand if the rates have been increased or not during or after the pandemic compared to the pre-pandemic era. With this information we can understand our immune system as a population and understand is there is any incline of certain causes of death or are we back to pre-pandemic period.
-
-```{r}
-#| echo: false
-deaths_data <- read_excel("Data/deaths.xlsx")
-head(deaths_data)
-```
-
-**3- Marriage Statistics**
-
-The Marriage usually used as a symbol of happiness and hope. The increase of marriages usually means that there is a general happy period of a countries. With the trend of the marriages we can understand the welfare of the country, the unemployment rate of the youth and the populations age dsitribution.If the marriages are in a increase trend we can say that the economic conditions of the country is getting better. That's what we will be investşigating with this data set.
-
-```{r}
-#| echo: false
-marriages_data <- read_excel("Data/marriages.xlsx")
-head(marriages_data)
-```
-
-**4- Average Age of Marriage**
-
-The average of the marriage along with the total amount of marriages in a country can show us the indebth details of the countries economic conditions. If the average age of marriage is decreasing we might say that the age distribution of the population is moving towards the youths.
-
-```{r}
-#| echo: false
-marriages_age_data <- read_excel("Data/marriages_age.xlsx")
-head(marriages_age_data)
-```
-
-**5- Import Data**
-
-The importing goods and services can mean that the country is not sufficiently producing the goods that is imported. This can be a good sign of diplomacy meanwhile if a country is importing all of its good we can say that this country is economically dependent. With the trend of the imports we can see if Türkiye is getting more depended with its economy.
-
-```{r}
-#| echo: false
-import_data <- read_excel("Data/import.xlsx")
-head(import_data)
-```
-
-**6- Export Data**
-
-The exporting of goods and services has a similar indentations of the import. Here the increase in exports means that the country is well off şn the domestic side has sufficient diplomatic communicatin to be able to export its surplus. The trend of the exports also will give us the economical back ground of the Türkiye for the time period.
-
-```{r}
-#| echo: false
-export_data <- read_excel("Data/export.xlsx")
-head(export_data)
-```
-
-**7- Birth Statistics**
-
-The birth statistics are important for a country since increasing the youth of a country can push its growth further. The trends of the birth can means that the country will be increasing the youth population.
-
-```{r}
-#| echo: false
-births_data <- read_excel("Data/births.xlsx")
-head(births_data)
-```
-
-**8- Fertility Rate**
-
-This with the birth statics we can understand the distribution fo the population much better.
-
-```{r}
-#| echo: false
-fertility_data <- read_excel("Data/fertility.xlsx")
-head(fertility_data)
-```
-
-**9- Employment Data**
-
-This is also one of the important aspect of a countries economical indicators. The higher the employment rate the country's internal investment are distributed. Ideally a country wants to be %100 employed. This data will be used to analyze this situation.
-
-```{r}
-#| echo: false
-
-employment_data <- read_excel("Data/employment.xlsx")
-head(employment_data)
-```
-
-**10- Education Level**
+## **2- Education Level**
 
 Education level is related with the technological advancements of a country to analyze the root of its economy. Some countries can be tech driven while others are related with the service industries. Checking the trends of the educational level of the country can give us some idea of its economical drivers. Checking the periods education level will also give us clues on the changes in the Türkiye.
+
+*-\>Here i will import the population data then add the new predefined column and show what the dataset looks like*
 
 ```{r}
 #| echo: false
 education_data <- read_excel("Data/education.xlsx")
+education_data <- add_covid_period(education_data)
 head(education_data)
+```
+
+## **3- Marriage Statistics**
+
+The Marriage usually used as a symbol of happiness and hope. The increase of marriages usually means that there is a general happy period of a countries. With the trend of the marriages we can understand the welfare of the country, the unemployment rate of the youth and the populations age dsitribution.If the marriages are in a increase trend we can say that the economic conditions of the country is getting better. That's what we will be investşigating with this data set.
+
+*-\>Here i will import the population data then add the new predefined column and show what the dataset looks like*
+
+```{r}
+#| echo: false
+marriages_data <- read_excel("Data/marriages.xlsx")
+marriages_data <- add_covid_period(marriages_data)
+head(marriages_data)
+```
+
+## **4- Average Age of Marriage**
+
+The average of the marriage along with the total amount of marriages in a country can show us the indebth details of the countries economic conditions. If the average age of marriage is decreasing we might say that the age distribution of the population is moving towards the youths.
+
+*-\>Here i will import the average age of marriage data then add the new predefined column and show what the dataset looks like*
+
+```{r}
+#| echo: false
+marriages_age_data <- read_excel("Data/marriages_age.xlsx")
+marriages_age_data <- add_covid_period(marriages_age_data)
+head(marriages_age_data)
+```
+
+## **5- Birth Statistics**
+
+The birth statistics are important for a country since increasing the youth of a country can push its growth further. The trends of the birth can means that the country will be increasing the youth population.
+
+*-\>Here i will import the average age of marriage data then add the new predefined column and show what the dataset looks like*
+
+```{r}
+#| echo: false
+births_data <- read_excel("Data/births.xlsx")
+births_data <- add_covid_period(births_data)
+head(births_data)
+```
+
+## **6- Fertility Rate**
+
+This with the birth statics we can understand the distribution fo the population much better.
+
+*-\>Here i will import the average age of marriage data then add the new predefined column and show what the dataset looks like*
+
+```{r}
+#| echo: false
+fertility_data <- read_excel("Data/fertility.xlsx")
+fertility_data <- add_covid_period(fertility_data)
+head(fertility_data)
+```
+
+## **7- Death Statistics**
+
+The death is an important factor to understand the affects of the Covid-19 to understand if the rates have been increased or not during or after the pandemic compared to the pre-pandemic era. With this information we can understand our immune system as a population and understand is there is any incline of certain causes of death or are we back to pre-pandemic period.
+
+*-\>Here i will import the population data then add the new predefined column and show what the dataset looks like*
+
+```{r}
+#| echo: false
+deaths_data <- read_excel("Data/deaths.xlsx")
+deaths_data <- add_covid_period(deaths_data)
+head(deaths_data)
+```
+
+## **8- Employment Data**
+
+This is also one of the important aspect of a countries economical indicators. The higher the employment rate the country's internal investment are distributed. Ideally a country wants to be %100 employed. This data will be used to analyze this situation.
+
+*-\>Here i will import the population data then add the new predefined column and show what the dataset looks like*
+
+```{r}
+#| echo: false
+employment_data <- read_excel("Data/employment.xlsx")
+employment_data <- add_covid_period(employment_data)
+head(employment_data)
+
+```
+
+## **9- Export Data**
+
+The exporting of goods and services has a similar indentations of the import. Here the increase in exports means that the country is well off şn the domestic side has sufficient diplomatic communicatin to be able to export its surplus. The trend of the exports also will give us the economical back ground of the Türkiye for the time period.
+
+*-\>Here i will import the population data then add the new predefined column and show what the dataset looks like*
+
+```{r}
+#| echo: false
+export_data <- read_excel("Data/export.xlsx")
+export_data <- add_covid_period(export_data)
+head(export_data)
+```
+
+## **10- Import Data**
+
+The importing goods and services can mean that the country is not sufficiently producing the goods that is imported. This can be a good sign of diplomacy meanwhile if a country is importing all of its good we can say that this country is economically dependent. With the trend of the imports we can see if Türkiye is getting more depended with its economy.
+
+*-\>Here i will import the population data then add the new predefined column and show what the dataset looks like*
+
+```{r}
+#| echo: false
+import_data <- read_excel("Data/import.xlsx")
+import_data <- add_covid_period(import_data)
+head(import_data)
 ```
 
 ## 2.1 Preprocessing
@@ -132,6 +174,14 @@ For the preprocessing of the data I used basic excel skills since i create the s
 Once we go through the data and the explanation of the data sets i will use. We can move on with the analysis. The analysis will mainly take 7 sections. These section will seperately analyzed then a conclusion will be made for each section.
 
 ## 3.1 Population
+
+```{r}
+population_summary <- population_data %>%
+  group_by(CovidPeriod) %>%
+  summarise(MeanPopulation = mean(Population, na.rm = TRUE), Count = n())
+print(population_summary)
+
+```
 
 The first step of every analysis is to see the general view of the trend. Here we can see the increase of the population over time. With this view we can observe;
 
@@ -265,7 +315,23 @@ ggplot(top5_gender_trend, aes(x = Year, y = Population, color = Gender)) +
 
 ## 3.2 Education
 
-xxxxxx
+```{r}
+education_summary <- education_data %>%
+  group_by(Year, Education_Level) %>%
+  summarise(Total = sum(Person), .groups = "drop")
+
+ggplot(education_summary, aes(x = Education_Level, y = Total, color = Education_Level, group = Education_Level)) +
+  geom_line(size = 1.2) +
+  facet_grid(~Year) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "Education Level Distribution by Year",
+    y = "Population",
+    x = "Education Level",
+    color = "Education Level"
+  ) +
+  theme_minimal()
+```
 
 ## 3.3 Marriage
 
