@@ -172,13 +172,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#project-overview-and-scope" id="toc-project-overview-and-scope" class="nav-link active" data-scroll-target="#project-overview-and-scope">1. Project Overview and Scope</a></li>
   <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">2. Data</a>
   <ul class="collapse">
+  <li><a href="#population-data" id="toc-population-data" class="nav-link" data-scroll-target="#population-data"><strong>1- Population Data</strong></a></li>
+  <li><a href="#marriage-statistics" id="toc-marriage-statistics" class="nav-link" data-scroll-target="#marriage-statistics"><strong>2- Marriage Statistics</strong></a></li>
+  <li><a href="#average-age-of-marriage" id="toc-average-age-of-marriage" class="nav-link" data-scroll-target="#average-age-of-marriage"><strong>3- Average Age of Marriage</strong></a></li>
+  <li><a href="#birth-statistics" id="toc-birth-statistics" class="nav-link" data-scroll-target="#birth-statistics"><strong>4- Birth Statistics</strong></a></li>
+  <li><a href="#fertility-rate" id="toc-fertility-rate" class="nav-link" data-scroll-target="#fertility-rate"><strong>5- Fertility Rate</strong></a></li>
+  <li><a href="#death-statistics" id="toc-death-statistics" class="nav-link" data-scroll-target="#death-statistics"><strong>6- Death Statistics</strong></a></li>
+  <li><a href="#employment-data" id="toc-employment-data" class="nav-link" data-scroll-target="#employment-data"><strong>7- Employment Data</strong></a></li>
+  <li><a href="#export-data" id="toc-export-data" class="nav-link" data-scroll-target="#export-data"><strong>8- Export Data</strong></a></li>
+  <li><a href="#import-data" id="toc-import-data" class="nav-link" data-scroll-target="#import-data"><strong>9- Import Data</strong></a></li>
   <li><a href="#preprocessing" id="toc-preprocessing" class="nav-link" data-scroll-target="#preprocessing">2.1 Preprocessing</a></li>
   </ul></li>
   <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">3. Analysis</a>
   <ul class="collapse">
   <li><a href="#population" id="toc-population" class="nav-link" data-scroll-target="#population">3.1 Population</a></li>
-  <li><a href="#education" id="toc-education" class="nav-link" data-scroll-target="#education">3.2 Education</a></li>
-  <li><a href="#marriage" id="toc-marriage" class="nav-link" data-scroll-target="#marriage">3.3 Marriage</a></li>
+  <li><a href="#marriage" id="toc-marriage" class="nav-link" data-scroll-target="#marriage">3.2 Marriage</a></li>
   <li><a href="#birth-and-fertility" id="toc-birth-and-fertility" class="nav-link" data-scroll-target="#birth-and-fertility">3.4 Birth and Fertility</a></li>
   <li><a href="#death" id="toc-death" class="nav-link" data-scroll-target="#death">3.5 Death</a></li>
   <li><a href="#employment" id="toc-employment" class="nav-link" data-scroll-target="#employment">3.6 Employment</a></li>
@@ -221,174 +229,215 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="data" class="level1">
 <h1>2. Data</h1>
-<p>The data sets that are used are taken from the TUIK. The below is the details of the such structure of these data sets.</p>
-<p><strong>1- Population Data</strong></p>
+<p>The data sets that are used are from the TUIK. The below is the details of the such structure of these data sets. Also, We need to add a new column to each database since we want the analysis to be focused on 3 time periods.</p>
+<p><em>-&gt; Here i will identify the libraries and the structure of the columns to be added later on.</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Getting the libraries needed</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#structuring the Columns to include the new periods</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>add_covid_period <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">CovidPeriod =</span> <span class="fu">case_when</span>(</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    Year <span class="sc">%in%</span> <span class="dv">2018</span><span class="sc">:</span><span class="dv">2019</span> <span class="sc">~</span> <span class="st">"Pre-COVID"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    Year <span class="sc">%in%</span> <span class="dv">2020</span><span class="sc">:</span><span class="dv">2022</span> <span class="sc">~</span> <span class="st">"During COVID"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    Year <span class="sc">%in%</span> <span class="dv">2023</span><span class="sc">:</span><span class="dv">2024</span> <span class="sc">~</span> <span class="st">"Post-COVID"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="population-data" class="level3">
+<h3 class="anchored" data-anchor-id="population-data"><strong>1- Population Data</strong></h3>
 <p>The population data will be used to identify the population trends, detect if there is a slowdown of population growths during or after the Covid-19.</p>
+<p><em>-&gt;Here i will import the population data then add the new predefined column and show what the dataset looks like</em></p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 4
-  City           Gender  Year Population
-  &lt;chr&gt;          &lt;chr&gt;  &lt;dbl&gt;      &lt;dbl&gt;
-1 Adana          Erkek   2024    1140836
-2 Adana          Kadın   2024    1139648
-3 Adıyaman       Erkek   2024     309540
-4 Adıyaman       Kadın   2024     301497
-5 Afyonkarahisar Erkek   2024     375263
-6 Afyonkarahisar Kadın   2024     374930</code></pre>
-</div>
-</div>
-<p><strong>2- Death Statistics</strong></p>
-<p>The death is an important factor to understand the affects of the Covid-19 to understand if the rates have been increased or not during or after the pandemic compared to the pre-pandemic era. With this information we can understand our immune system as a population and understand is there is any incline of certain causes of death or are we back to pre-pandemic period.</p>
-<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>population_data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"Data/population.xls"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>population_data <span class="ot">&lt;-</span> <span class="fu">add_covid_period</span>(population_data)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(population_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 5
-  `Death Reason Code` `Death Reason`             Gender  Year `Amount of Deaths`
-  &lt;chr&gt;               &lt;chr&gt;                      &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;             
-1 A00-B99             Enfeksiyon ve parazit has… Erkek   2018 5438              
-2 C00-D48             İyi huylu ve kötü huylu t… Erkek   2018 52933             
-3 D50-D89             Kan ve kan yapıcı organla… Erkek   2018 515               
-4 E00-E90             İç salgı bezi (endokrin),… Erkek   2018 8454              
-5 F00-F99             Zihinsel (mental) ve davr… Erkek   2018 243               
-6 G00-H95             Sinir sistemi ve duyu org… Erkek   2018 9019              </code></pre>
+  City           Gender  Year Population CovidPeriod
+  &lt;chr&gt;          &lt;chr&gt;  &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;      
+1 Adana          Erkek   2024    1140836 Post-COVID 
+2 Adana          Kadın   2024    1139648 Post-COVID 
+3 Adıyaman       Erkek   2024     309540 Post-COVID 
+4 Adıyaman       Kadın   2024     301497 Post-COVID 
+5 Afyonkarahisar Erkek   2024     375263 Post-COVID 
+6 Afyonkarahisar Kadın   2024     374930 Post-COVID </code></pre>
 </div>
 </div>
-<p><strong>3- Marriage Statistics</strong></p>
+</section>
+<section id="marriage-statistics" class="level2">
+<h2 class="anchored" data-anchor-id="marriage-statistics"><strong>2- Marriage Statistics</strong></h2>
 <p>The Marriage usually used as a symbol of happiness and hope. The increase of marriages usually means that there is a general happy period of a countries. With the trend of the marriages we can understand the welfare of the country, the unemployment rate of the youth and the populations age dsitribution.If the marriages are in a increase trend we can say that the economic conditions of the country is getting better. That’s what we will be investşigating with this data set.</p>
+<p><em>-&gt;Here i will import the population data then add the new predefined column and show what the dataset looks like</em></p>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>marriages_data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"Data/marriages.xlsx"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>marriages_data <span class="ot">&lt;-</span> <span class="fu">add_covid_period</span>(marriages_data)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(marriages_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  City            Year Marriages
-  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
-1 Adana           2024     15076
-2 Adıyaman        2024      4720
-3 Afyonkarahisar  2024      4811
-4 Ağrı            2024      3132
-5 Amasya          2024      2134
-6 Ankara          2024     37199</code></pre>
+<pre><code># A tibble: 6 × 4
+  City            Year Marriages CovidPeriod
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;      
+1 Adana           2024     15076 Post-COVID 
+2 Adıyaman        2024      4720 Post-COVID 
+3 Afyonkarahisar  2024      4811 Post-COVID 
+4 Ağrı            2024      3132 Post-COVID 
+5 Amasya          2024      2134 Post-COVID 
+6 Ankara          2024     37199 Post-COVID </code></pre>
 </div>
 </div>
-<p><strong>4- Average Age of Marriage</strong></p>
+</section>
+<section id="average-age-of-marriage" class="level2">
+<h2 class="anchored" data-anchor-id="average-age-of-marriage"><strong>3- Average Age of Marriage</strong></h2>
 <p>The average of the marriage along with the total amount of marriages in a country can show us the indebth details of the countries economic conditions. If the average age of marriage is decreasing we might say that the age distribution of the population is moving towards the youths.</p>
+<p><em>-&gt;Here i will import the average age of marriage data then add the new predefined column and show what the dataset looks like</em></p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 4
-  City            Year Gender      `Average Marriage Age`
-  &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;                        &lt;dbl&gt;
-1 Türkiye         2001 "Erkek\r\n"                   27.6
-2 Adana           2001 "Erkek\r\n"                   28.7
-3 Adıyaman        2001 "Erkek\r\n"                   28.0
-4 Afyonkarahisar  2001 "Erkek\r\n"                   25.3
-5 Ağrı            2001 "Erkek\r\n"                   29.2
-6 Amasya          2001 "Erkek\r\n"                   26.5</code></pre>
-</div>
-</div>
-<p><strong>5- Import Data</strong></p>
-<p>The importing goods and services can mean that the country is not sufficiently producing the goods that is imported. This can be a good sign of diplomacy meanwhile if a country is importing all of its good we can say that this country is economically dependent. With the trend of the imports we can see if Türkiye is getting more depended with its economy.</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  City           Year  `Import ($)`      
-  &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt;             
-1 Adana          2024  3486030.9520000005
-2 Adıyaman       2024  35522.072         
-3 Afyonkarahisar 2024  171471.2          
-4 Ağrı           2024  155005.041        
-5 Amasya         2024  50566.66          
-6 Ankara         2024  17222315.890000001</code></pre>
-</div>
-</div>
-<p><strong>6- Export Data</strong></p>
-<p>The exporting of goods and services has a similar indentations of the import. Here the increase in exports means that the country is well off şn the domestic side has sufficient diplomatic communicatin to be able to export its surplus. The trend of the exports also will give us the economical back ground of the Türkiye for the time period.</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  City            Year `Import ($)`
-  &lt;chr&gt;          &lt;dbl&gt;        &lt;dbl&gt;
-1 Adana           2024     3111751.
-2 Adıyaman        2024       55579.
-3 Afyonkarahisar  2024      345845.
-4 Ağrı            2024       51565.
-5 Amasya          2024      165115.
-6 Ankara          2024    14975519.</code></pre>
-</div>
-</div>
-<p><strong>7- Birth Statistics</strong></p>
-<p>The birth statistics are important for a country since increasing the youth of a country can push its growth further. The trends of the birth can means that the country will be increasing the youth population.</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 4
-  City           `Gender of the Baby`  Year `Doğum Miktarı`
-  &lt;chr&gt;          &lt;chr&gt;                &lt;dbl&gt;           &lt;dbl&gt;
-1 Adana          Erkek-Boy             2018           18035
-2 Adana          Kız-Girl              2018           17352
-3 Adıyaman       Erkek-Boy             2018            6472
-4 Adıyaman       Kız-Girl              2018            6094
-5 Afyonkarahisar Erkek-Boy             2018            5192
-6 Afyonkarahisar Kız-Girl              2018            4883</code></pre>
-</div>
-</div>
-<p><strong>8- Fertility Rate</strong></p>
-<p>This with the birth statics we can understand the distribution fo the population much better.</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-   Year Category     `Fertility Details`
-  &lt;dbl&gt; &lt;chr&gt;                      &lt;dbl&gt;
-1  2001 Doğum sayısı             1323341
-2  2002 Doğum sayısı             1229555
-3  2003 Doğum sayısı             1198927
-4  2004 Doğum sayısı             1222484
-5  2005 Doğum sayısı             1244041
-6  2006 Doğum sayısı             1255432</code></pre>
-</div>
-</div>
-<p><strong>9- Employment Data</strong></p>
-<p>This is also one of the important aspect of a countries economical indicators. The higher the employment rate the country’s internal investment are distributed. Ideally a country wants to be %100 employed. This data will be used to analyze this situation.</p>
-<div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>New names:
-• `` -&gt; `...5`
-• `` -&gt; `...6`
-• `` -&gt; `...7`
-• `` -&gt; `...8`
-• `` -&gt; `...9`
-• `` -&gt; `...10`
-• `` -&gt; `...11`
-• `` -&gt; `...12`
-• `` -&gt; `...13`
-• `` -&gt; `...14`
-• `` -&gt; `...15`
-• `` -&gt; `...16`</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 16
-   Year Gender  `Martial Status` `Employment Rate` ...5  ...6  ...7  ...8  ...9 
-  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;                        &lt;dbl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;lgl&gt;
-1  2014 "Erkek… Boşandı                       63.2 NA    NA    NA    NA    NA   
-2  2014 "Kadın" Boşandı                       39.7 NA    NA    NA    NA    NA   
-3  2015 "Erkek… Boşandı                       63.2 NA    NA    NA    NA    NA   
-4  2015 "Kadın" Boşandı                       39.5 NA    NA    NA    NA    NA   
-5  2016 "Erkek… Boşandı                       63.6 NA    NA    NA    NA    NA   
-6  2016 "Kadın" Boşandı                       41.7 NA    NA    NA    NA    NA   
-# ℹ 7 more variables: ...10 &lt;lgl&gt;, ...11 &lt;lgl&gt;, ...12 &lt;lgl&gt;, ...13 &lt;lgl&gt;,
-#   ...14 &lt;lgl&gt;, ...15 &lt;lgl&gt;, ...16 &lt;dbl&gt;</code></pre>
-</div>
-</div>
-<p><strong>10- Education Level</strong></p>
-<p>Education level is related with the technological advancements of a country to analyze the root of its economy. Some countries can be tech driven while others are related with the service industries. Checking the trends of the educational level of the country can give us some idea of its economical drivers. Checking the periods education level will also give us clues on the changes in the Türkiye.</p>
-<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>marriages_age_data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"Data/marriages_age.xlsx"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>marriages_age_data <span class="ot">&lt;-</span> <span class="fu">add_covid_period</span>(marriages_age_data)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(marriages_age_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 5
-  City             Gender  Year `Education Level`  Person
-  &lt;chr&gt;            &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;
-1 Adana            Erkek   2015 Toplam             970600
-2 &nbsp; Adıyaman       Erkek   2015 Toplam             265011
-3 &nbsp; Afyonkarahisar Erkek   2015 Toplam             317089
-4 &nbsp; Ağrı           Erkek   2015 Toplam             239823
-5 &nbsp; Amasya         Erkek   2015 Toplam             146232
-6 &nbsp; Ankara         Erkek   2015 Toplam            2365947</code></pre>
+  City            Year Gender      Average_Marriage_Age CovidPeriod
+  &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;      
+1 Türkiye         2001 "Erkek\r\n"                 27.6 &lt;NA&gt;       
+2 Adana           2001 "Erkek\r\n"                 28.7 &lt;NA&gt;       
+3 Adıyaman        2001 "Erkek\r\n"                 28.0 &lt;NA&gt;       
+4 Afyonkarahisar  2001 "Erkek\r\n"                 25.3 &lt;NA&gt;       
+5 Ağrı            2001 "Erkek\r\n"                 29.2 &lt;NA&gt;       
+6 Amasya          2001 "Erkek\r\n"                 26.5 &lt;NA&gt;       </code></pre>
 </div>
 </div>
+</section>
+<section id="birth-statistics" class="level2">
+<h2 class="anchored" data-anchor-id="birth-statistics"><strong>4- Birth Statistics</strong></h2>
+<p>The birth statistics are important for a country since increasing the youth of a country can push its growth further. The trends of the birth can means that the country will be increasing the youth population.</p>
+<p><em>-&gt;Here i will import the average age of marriage data then add the new predefined column and show what the dataset looks like</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>births_data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"Data/births.xlsx"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>births_data <span class="ot">&lt;-</span> <span class="fu">add_covid_period</span>(births_data)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(births_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+  City           Gender_Baby  Year Births CovidPeriod
+  &lt;chr&gt;          &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;      
+1 Adana          Erkek-Boy    2018  18035 Pre-COVID  
+2 Adana          Kız-Girl     2018  17352 Pre-COVID  
+3 Adıyaman       Erkek-Boy    2018   6472 Pre-COVID  
+4 Adıyaman       Kız-Girl     2018   6094 Pre-COVID  
+5 Afyonkarahisar Erkek-Boy    2018   5192 Pre-COVID  
+6 Afyonkarahisar Kız-Girl     2018   4883 Pre-COVID  </code></pre>
+</div>
+</div>
+</section>
+<section id="fertility-rate" class="level2">
+<h2 class="anchored" data-anchor-id="fertility-rate"><strong>5- Fertility Rate</strong></h2>
+<p>This with the birth statics we can understand the distribution fo the population much better.</p>
+<p><em>-&gt;Here i will import the average age of marriage data then add the new predefined column and show what the dataset looks like</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fertility_data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"Data/fertility.xlsx"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>fertility_data <span class="ot">&lt;-</span> <span class="fu">add_covid_period</span>(fertility_data)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(fertility_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+   Year Category   Fertility_Rate CovidPeriod
+  &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;      
+1  2001 Doğum Hızı           20.3 &lt;NA&gt;       
+2  2002 Doğum Hızı           18.6 &lt;NA&gt;       
+3  2003 Doğum Hızı           17.9 &lt;NA&gt;       
+4  2004 Doğum Hızı           18.1 &lt;NA&gt;       
+5  2005 Doğum Hızı           18.2 &lt;NA&gt;       
+6  2006 Doğum Hızı           18.1 &lt;NA&gt;       </code></pre>
+</div>
+</div>
+</section>
+<section id="death-statistics" class="level2">
+<h2 class="anchored" data-anchor-id="death-statistics"><strong>6- Death Statistics</strong></h2>
+<p>The death is an important factor to understand the affects of the Covid-19 to understand if the rates have been increased or not during or after the pandemic compared to the pre-pandemic era. With this information we can understand our immune system as a population and understand is there is any incline of certain causes of death or are we back to pre-pandemic period.</p>
+<p><em>-&gt;Here i will import the population data then add the new predefined column and show what the dataset looks like</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>deaths_data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"Data/deaths.xlsx"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>deaths_data <span class="ot">&lt;-</span> <span class="fu">add_covid_period</span>(deaths_data)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(deaths_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 6
+  Death_Code Death_Reason                 Gender  Year Deaths_Amount CovidPeriod
+  &lt;chr&gt;      &lt;chr&gt;                        &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt; &lt;chr&gt;      
+1 A00-B99    Enfeksiyon ve parazit hasta… Erkek   2018          5438 Pre-COVID  
+2 C00-D48    İyi huylu ve kötü huylu tüm… Erkek   2018         52933 Pre-COVID  
+3 D50-D89    Kan ve kan yapıcı organları… Erkek   2018           515 Pre-COVID  
+4 E00-E90    İç salgı bezi (endokrin), b… Erkek   2018          8454 Pre-COVID  
+5 F00-F99    Zihinsel (mental) ve davran… Erkek   2018           243 Pre-COVID  
+6 G00-H95    Sinir sistemi ve duyu organ… Erkek   2018          9019 Pre-COVID  </code></pre>
+</div>
+</div>
+</section>
+<section id="employment-data" class="level2">
+<h2 class="anchored" data-anchor-id="employment-data"><strong>7- Employment Data</strong></h2>
+<p>This is also one of the important aspect of a countries economical indicators. The higher the employment rate the country’s internal investment are distributed. Ideally a country wants to be %100 employed. This data will be used to analyze this situation.</p>
+<p><em>-&gt;Here i will import the population data then add the new predefined column and show what the dataset looks like</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>employment_data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"Data/employment.xlsx"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>employment_data <span class="ot">&lt;-</span> <span class="fu">add_covid_period</span>(employment_data)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(employment_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+   Year Gender      Status  Employment_Rate CovidPeriod
+  &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;             &lt;dbl&gt; &lt;chr&gt;      
+1  2014 "Erkek\r\n" Boşandı            63.2 &lt;NA&gt;       
+2  2014 "Kadın"     Boşandı            39.7 &lt;NA&gt;       
+3  2015 "Erkek\r\n" Boşandı            63.2 &lt;NA&gt;       
+4  2015 "Kadın"     Boşandı            39.5 &lt;NA&gt;       
+5  2016 "Erkek\r\n" Boşandı            63.6 &lt;NA&gt;       
+6  2016 "Kadın"     Boşandı            41.7 &lt;NA&gt;       </code></pre>
+</div>
+</div>
+</section>
+<section id="export-data" class="level2">
+<h2 class="anchored" data-anchor-id="export-data"><strong>8- Export Data</strong></h2>
+<p>The exporting of goods and services has a similar indentations of the import. Here the increase in exports means that the country is well off şn the domestic side has sufficient diplomatic communicatin to be able to export its surplus. The trend of the exports also will give us the economical back ground of the Türkiye for the time period.</p>
+<p><em>-&gt;Here i will import the population data then add the new predefined column and show what the dataset looks like</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>export_data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"Data/export.xlsx"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>export_data <span class="ot">&lt;-</span> <span class="fu">add_covid_period</span>(export_data)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(export_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  City            Year    Export CovidPeriod
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;      
+1 Adana           2024  3111751. Post-COVID 
+2 Adıyaman        2024    55579. Post-COVID 
+3 Afyonkarahisar  2024   345845. Post-COVID 
+4 Ağrı            2024    51565. Post-COVID 
+5 Amasya          2024   165115. Post-COVID 
+6 Ankara          2024 14975519. Post-COVID </code></pre>
+</div>
+</div>
+</section>
+<section id="import-data" class="level2">
+<h2 class="anchored" data-anchor-id="import-data"><strong>9- Import Data</strong></h2>
+<p>The importing goods and services can mean that the country is not sufficiently producing the goods that is imported. This can be a good sign of diplomacy meanwhile if a country is importing all of its good we can say that this country is economically dependent. With the trend of the imports we can see if Türkiye is getting more depended with its economy.</p>
+<p><em>-&gt;Here i will import the population data then add the new predefined column and show what the dataset looks like</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>import_data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"Data/import.xlsx"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>import_data <span class="ot">&lt;-</span> <span class="fu">add_covid_period</span>(import_data)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(import_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  City           Year     Import CovidPeriod
+  &lt;chr&gt;          &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;      
+1 Adana          2024   3486031. Post-COVID 
+2 Adıyaman       2024     35522. Post-COVID 
+3 Afyonkarahisar 2024    171471. Post-COVID 
+4 Ağrı           2024    155005. Post-COVID 
+5 Amasya         2024     50567. Post-COVID 
+6 Ankara         2024  17222316. Post-COVID </code></pre>
+</div>
+</div>
+</section>
 <section id="preprocessing" class="level2">
 <h2 class="anchored" data-anchor-id="preprocessing">2.1 Preprocessing</h2>
 <p>For the preprocessing of the data I used basic excel skills since i create the structure of data i want to analyze. Also the data sets weer small in comparison to other topic i could have analyzed. What i did basically is tidying data via the tidy methodologies of the Hadley Wickham (1). I formatted my data into his ideology of data shaping this way it was much easier to use the data sets i obtained from TUIK.</p>
@@ -396,25 +445,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="analysis" class="level1">
 <h1>3. Analysis</h1>
-<p>Once we go through the data and the explanation of the data sets i will use. We can move on with the analysis. The analysis will mainly take 7 sections. These section will seperately analyzed then a conclusion will be made for each section.</p>
+<p>Once we go through the data and the explanation of the data sets i will use. We can move on with the analysis. The analysis will mainly take 6 sections. These section will separately analyzed then a conclusion will be made for each section.</p>
 <section id="population" class="level2">
 <h2 class="anchored" data-anchor-id="population">3.1 Population</h2>
-<p>The first step of every analysis is to see the general view of the trend. Here we can see the increase of the population over time. With this view we can observe;</p>
-<ul>
-<li><p>The overall population is increasing over the time period.</p></li>
-<li><p>The increase of the pre-pandemic and during pandemic periods seems to be similar.</p></li>
-<li><p>There is a drop of the incline of the population growth during the post-pandemic period.</p></li>
-</ul>
+<p>Understanding demographic changes is essential for evaluating the long-term effects of significant events like the COVID-19 pandemic. This section focuses on analyzing Türkiye’s population data across the pre-COVID (2018–2019), during-COVID (2020–2022), and post-COVID (2023–2024) periods using city- and gender-level statistics.</p>
+<p>The summary table shows that Türkiye experienced a significant increase in population during the COVID period compared to the pre-COVID period. However, the growth rate declined in the post-COVID era, indicating a possible long-term demographic shift. This deceleration may reflect changes in migration, birth rates, or administrative adjustments.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>population_summary <span class="ot">&lt;-</span> population_data <span class="sc">%&gt;%</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">TotalPopulation =</span> <span class="fu">sum</span>(Population))</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(population_summary, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> TotalPopulation)) <span class="sc">+</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"red"</span>,<span class="at">linewidth =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">unique</span>(population_summary<span class="sc">$</span>Year)) <span class="sc">+</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Total Population Over Years"</span>, <span class="at">y =</span> <span class="st">"Population"</span>, <span class="at">x =</span> <span class="st">"Year"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>population_summary <span class="ot">&lt;-</span> population_data <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CovidPeriod) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">MeanPopulation =</span> <span class="fu">sum</span>(Population, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">/</span>(<span class="fu">n</span>()<span class="sc">/</span><span class="dv">162</span>), <span class="at">Count =</span> <span class="fu">n</span>())</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(population_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  CovidPeriod  MeanPopulation Count
+  &lt;chr&gt;                 &lt;dbl&gt; &lt;int&gt;
+1 During COVID      84524729.   486
+2 Post-COVID        85518660.   324
+3 Pre-COVID         82579440.   324</code></pre>
+</div>
+</div>
+<p>Geographical distribution of population volumes across cities remained relatively stable throughout the periods. While most provinces showed consistent patterns, a few outlier cities displayed significant changes, possibly due to internal migration or policy-driven relocations during the pandemic.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(population_data, <span class="fu">aes</span>(<span class="at">x =</span> CovidPeriod, <span class="at">y =</span> Population, <span class="at">col =</span> CovidPeriod)) <span class="sc">+</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> comma) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -422,36 +475,284 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 </div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Population Distribution by COVID Period"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$title
+[1] "Population Distribution by COVID Period"
+
+attr(,"class")
+[1] "labels"</code></pre>
 </div>
-<p>We need to dive in more with the population data. Lets see the</p>
-<p>gender_summary &lt;- population_data %&gt;% group_by(Year, Gender) %&gt;% summarise(Population = sum(Population))</p>
-<p>ggplot(gender_summary, aes(x = Year, y = Population, color = Gender)) + geom_line(size = 1.2) + scale_y_continuous(labels = scales::comma) + labs(title = “Population Trend by Gender”)</p>
-</section>
-<section id="education" class="level2">
-<h2 class="anchored" data-anchor-id="education">3.2 Education</h2>
-<p>xxxxxx</p>
+</div>
+<p>In terms of gender distribution, the data suggests an almost 50-50 population split between men and women across all time periods. This indicates no gender-specific demographic shock during or after the pandemic.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(population_data, <span class="fu">aes</span>(<span class="at">x =</span> CovidPeriod, <span class="at">y =</span> Population, <span class="at">col =</span> Gender)) <span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> comma) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Gender) <span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Population by Gender and COVID Period"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It can be said that the pandemic did not appear to alter Türkiye’s overall gender demographics or the distribution of population across most provinces. However, the slowdown in population growth in the post-COVID era is notable and warrants further investigation into underlying causes such as migration or fertility trends.</p>
 </section>
 <section id="marriage" class="level2">
-<h2 class="anchored" data-anchor-id="marriage">3.3 Marriage</h2>
-<p>xxxxxx</p>
+<h2 class="anchored" data-anchor-id="marriage">3.2 Marriage</h2>
+<p>Marriage patterns offer valuable insights into societal behavior, particularly in times of socio-economic uncertainty. This section investigates the trends in marriage volumes and average marriage age in Türkiye over the defined COVID periods.</p>
+<p>The data clearly demonstrates that the number of marriages dropped significantly during the pandemic, likely due to strict government regulations, social distancing, and general uncertainty. Interestingly, the post-COVID period shows a marked rebound, surpassing even the pre-COVID levels. This suggests a “catch-up” effect where delayed marriages during the pandemic were actualized afterward.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>marriage_summary <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(marriages_data) <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CovidPeriod) <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">MeanMarriages =</span> <span class="fu">mean</span>(Marriages, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">/</span>(<span class="fu">n</span>()<span class="sc">/</span><span class="dv">81</span>), <span class="at">Count =</span> <span class="fu">n</span>())</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(marriage_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  CovidPeriod  MeanMarriages Count
+  &lt;chr&gt;                &lt;dbl&gt; &lt;int&gt;
+1 During COVID         2232.   243
+2 Post-COVID           3504.   162
+3 Pre-COVID            3385.   162</code></pre>
+</div>
+</div>
+<p>Despite these fluctuations in total numbers, annual averages of marriages appear consistent across years, indicating that the underlying societal inclination towards marriage may not have changed, only the timing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">na.omit</span>(marriages_data), <span class="fu">aes</span>(<span class="at">x =</span> CovidPeriod, <span class="at">y =</span> Marriages, <span class="at">fill =</span> CovidPeriod)) <span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> <span class="fu">scale_y_log10</span>(<span class="at">labels=</span>comma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Marriage Count by COVID Period"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$title
+[1] "Marriage Count by COVID Period"
+
+attr(,"class")
+[1] "labels"</code></pre>
+</div>
+</div>
+<p>Moreover, the average age at marriage has risen for both men and women by at least two years. This could be indicative of broader societal changes such as delayed adulthood, economic concerns, or educational prioritization.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">na.omit</span>(marriages_age_data), <span class="fu">aes</span>(<span class="at">x =</span> Gender, <span class="at">y =</span> Average_Marriage_Age, <span class="at">fill =</span> Gender)) <span class="sc">+</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>CovidPeriod) <span class="sc">+</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Average Marriage Age by Gender and COVID Period"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Overall, the pandemic had a temporary suppressive effect on marriage events, but long-term marriage rates remain stable. However, the rising age of marriage signals a structural transformation in social norms.</p>
 </section>
 <section id="birth-and-fertility" class="level2">
 <h2 class="anchored" data-anchor-id="birth-and-fertility">3.4 Birth and Fertility</h2>
+<p>The analysis of birth and fertility rates is crucial to assess generational continuity and public health. This section focuses on how these metrics evolved before, during, and after the COVID pandemic in Türkiye.</p>
+<p>In contrast to the decline in marriage numbers during the pandemic, birth rates actually increased. This counterintuitive finding could suggest that family planning behaviors shifted during lockdowns or that other socio-economic factors were at play. It is worth noting that the absence of 2024 data from TÜİK may slightly skew the post-COVID average downward.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>birth_summary <span class="ot">&lt;-</span> births_data <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CovidPeriod) <span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">TotalBirths =</span> <span class="fu">sum</span>(Births, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">Count =</span> <span class="fu">n</span>())</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(birth_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  CovidPeriod  TotalBirths Count
+  &lt;chr&gt;              &lt;dbl&gt; &lt;int&gt;
+1 During COVID     3243235   486
+2 Post-COVID        958408   162
+3 Pre-COVID        2448021   324</code></pre>
+</div>
+</div>
+<p>Gender distribution in births remains consistent throughout all periods, mirroring the population statistics with near-equal ratios of boys and girls.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(births_data, <span class="fu">aes</span>(<span class="at">x =</span> CovidPeriod, <span class="at">y =</span> Births, <span class="at">fill =</span> Gender_Baby)) <span class="sc">+</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> comma) <span class="sc">+</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Gender_Baby) <span class="sc">+</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Births by Baby Gender and COVID Period"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>However, fertility rates have steadily declined from 15 births per 1,000 women in the pre-COVID era to 11 in the post-COVID period. This trend may reflect delayed childbearing, economic uncertainties, or broader demographic transitions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">na.omit</span>(fertility_data), <span class="fu">aes</span>(<span class="at">x =</span> CovidPeriod, <span class="at">y =</span> Fertility_Rate, <span class="at">col =</span> CovidPeriod)) <span class="sc">+</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Fertility by COVID Period"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In summary, although there was a temporary rise in births during the pandemic, Türkiye continues to face a long-term decline in fertility—a concern for future labor force and demographic sustainability.</p>
 </section>
 <section id="death" class="level2">
 <h2 class="anchored" data-anchor-id="death">3.5 Death</h2>
+<p>Mortality trends provide a direct lens into public health crises. This section evaluates changes in total deaths, gender-specific mortality, and cause-of-death distributions over the COVID periods.</p>
+<p>As expected, the total number of deaths peaked significantly during the pandemic. This increase aligns with global mortality surges due to COVID-19 and strained healthcare systems.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>death_summary <span class="ot">&lt;-</span> deaths_data <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CovidPeriod) <span class="sc">%&gt;%</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">TotalDeaths =</span> <span class="fu">sum</span>(Deaths_Amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">Count =</span> <span class="fu">n</span>())</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(death_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  CovidPeriod  TotalDeaths Count
+  &lt;chr&gt;              &lt;dbl&gt; &lt;int&gt;
+1 During COVID     1503511   108
+2 Post-COVID        495807    36
+3 Pre-COVID         835577    72</code></pre>
+</div>
+</div>
+<p>Male mortality rates are consistently higher than female rates across all time periods. Interestingly, while male deaths return to near pre-COVID levels in the post-COVID period, female deaths slightly decrease compared to both earlier periods. This could suggest differences in resilience, healthcare access, or underlying conditions between genders.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(deaths_data, <span class="fu">aes</span>(<span class="at">x =</span> CovidPeriod, <span class="at">y =</span> Deaths_Amount, <span class="at">fill =</span> Gender)) <span class="sc">+</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> comma)<span class="sc">+</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Gender) <span class="sc">+</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Deaths by Gender and COVID Period"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Despite the surge in death counts, the distribution of causes of death remained largely unchanged. This suggests that COVID-related deaths may have been either recorded under existing ICD categories or did not displace other dominant causes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(deaths_data, <span class="fu">aes</span>(<span class="at">x =</span> Death_Reason, <span class="at">y =</span> Deaths_Amount, <span class="at">col =</span> Death_Reason)) <span class="sc">+</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>CovidPeriod) <span class="sc">+</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Cause of Deaths by COVID Period"</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To conclude, while the pandemic caused a notable spike in mortality, its impact appears to have been temporary and gender-skewed. The consistency in cause-of-death categories may reflect either data classification limitations or resilient patterns in underlying mortality.</p>
 </section>
 <section id="employment" class="level2">
 <h2 class="anchored" data-anchor-id="employment">3.6 Employment</h2>
+<p>The labor market response to major crises like COVID-19 can have long-lasting socio-economic consequences. This section analyzes employment rates by gender and marital status across COVID periods.</p>
+<p>Post-COVID, Türkiye experienced its highest employment rates across the observed timeline, possibly driven by economic recovery programs and adaptation to remote work structures.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>employment_summary <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(employment_data) <span class="sc">%&gt;%</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CovidPeriod) <span class="sc">%&gt;%</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">MeanEmployment =</span> <span class="fu">mean</span>(Employment_Rate, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">Count =</span> <span class="fu">n</span>())</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(employment_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  CovidPeriod  MeanEmployment Count
+  &lt;chr&gt;                 &lt;dbl&gt; &lt;int&gt;
+1 During COVID           38.4    24
+2 Post-COVID             42.2    16
+3 Pre-COVID              39.9    16</code></pre>
+</div>
+</div>
+<p>Throughout all periods, male employment consistently exceeds that of females, regardless of marital status. These findings highlight persistent gender disparities in labor force participation, unaffected by the pandemic.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">na.omit</span>(employment_data), <span class="fu">aes</span>(<span class="at">x =</span> CovidPeriod, <span class="at">y =</span> Employment_Rate, <span class="at">col =</span> Gender)) <span class="sc">+</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Status) <span class="sc">+</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Employment Rate by Gender, Marital Status and COVID Period"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>To sum up</strong>, the pandemic did not significantly change employment structures by gender or marital status, but the post-COVID recovery appears to have brought higher overall employment levels.</p>
 </section>
 <section id="export-and-import" class="level2">
 <h2 class="anchored" data-anchor-id="export-and-import">3.7 Export and Import</h2>
-<p>xxxxxx</p>
+<p>This section investigates Türkiye’s international trade trends by analyzing export and import values over the COVID periods.</p>
+<p>Both export and import values show an increasing trend across all periods. However, the growth in import values consistently outpaces export growth. This widening trade imbalance could reflect supply chain dependencies, energy imports, or shifts in domestic consumption.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>export_summary <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(export_data) <span class="sc">%&gt;%</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CovidPeriod) <span class="sc">%&gt;%</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">MeanExport =</span> <span class="fu">mean</span>(Export, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">Count =</span> <span class="fu">n</span>())</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(export_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  CovidPeriod  MeanExport Count
+  &lt;chr&gt;             &lt;dbl&gt; &lt;int&gt;
+1 During COVID   2638301.   246
+2 Post-COVID     3155047.   164
+3 Pre-COVID      2182936.   164</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>import_summary <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(import_data) <span class="sc">%&gt;%</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CovidPeriod) <span class="sc">%&gt;%</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">MeanImport =</span> <span class="fu">mean</span>(Import, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">Count =</span> <span class="fu">n</span>())</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(import_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  CovidPeriod  MeanImport Count
+  &lt;chr&gt;             &lt;dbl&gt; &lt;int&gt;
+1 During COVID   3432341.   249
+2 Post-COVID     4252892.   166
+3 Pre-COVID      2692059.   164</code></pre>
+</div>
+</div>
+<p>Visualizations confirm this pattern, with both metrics showing upward trends, but imports displaying greater variance and higher average values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">na.omit</span>(export_data), <span class="fu">aes</span>(<span class="at">x =</span> CovidPeriod, <span class="at">y =</span> Export, <span class="at">fill =</span> CovidPeriod)) <span class="sc">+</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> comma) <span class="sc">+</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Export Amount by COVID Period"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">na.omit</span>(import_data), <span class="fu">aes</span>(<span class="at">x =</span> CovidPeriod, <span class="at">y =</span> Import, <span class="at">fill =</span> CovidPeriod)) <span class="sc">+</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> <span class="fu">scale_y_log10</span> (<span class="at">labels =</span> comma) <span class="sc">+</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Import Amount by COVID Period"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In conclusion, while Türkiye’s international trade volumes increased steadily, the persistent import surplus suggests vulnerabilities that could affect currency valuation, inflation, and trade policy decisions.</p>
 </section>
 </section>
 <section id="results-and-key-takeaways" class="level1">
 <h1>4. Results and Key Takeaways</h1>
-<p>xxxxxx</p>
+<p>This analysis explored the multi-dimensional effects of the COVID-19 pandemic in Türkiye using official statistics from TÜİK, spanning population, marriage, birth and fertility, death, employment, and trade indicators. By comparing three distinct time periods—pre-COVID (2018–2019), during COVID (2020–2022), and post-COVID (2023–2024)—we captured both the immediate and residual impacts of the pandemic on social and economic indicators.</p>
+<p>Population data&nbsp;reveal that while Türkiye’s total population increased significantly during the COVID period, the post-COVID growth rate declined. Despite this change in pace, the distribution of population across provinces remained largely stable, except for a few outlier cities which experienced notable shifts. Gender composition of the population also remained consistent, maintaining a nearly 50-50 male-to-female ratio throughout all periods.</p>
+<p>In the domain of&nbsp;marriages, a sharp drop was observed during the pandemic, attributable to social restrictions and uncertainty. Interestingly, the number of marriages rebounded in the post-COVID period, exceeding pre-pandemic levels—likely reflecting deferred unions. Despite this temporal disruption, the average number of annual marriages remained stable across the years, suggesting unchanged social norms. Additionally, both men and women began marrying later, with average marriage age increasing by at least two years, potentially signaling deeper shifts in societal expectations and life planning.</p>
+<p>Contrary to marriage trends,&nbsp;birth rates&nbsp;increased during the COVID period. However, due to missing data for 2024, the overall post-COVID average appears lower. Gender distribution in births reflected the overall population structure, remaining balanced. Most notably, the&nbsp;fertility rate declined&nbsp;from 15 in the pre-COVID era to 11 in the post-COVID period, signaling a longer-term demographic concern regarding population replacement levels.</p>
+<p>Unsurprisingly,&nbsp;death rates surged&nbsp;during the COVID period, with male mortality consistently exceeding female mortality in all periods. Interestingly, while men’s death counts returned to pre-COVID levels in the post-pandemic era, women experienced a slight reduction in mortality post-COVID. Despite fluctuations in volume, the&nbsp;patterns of causes of death remained consistent, suggesting that COVID-19 did not dramatically alter the leading underlying causes of death.</p>
+<p>In terms of&nbsp;employment, the highest average employment rate was observed in the post-COVID period, pointing to a strong economic recovery. However, gender disparities remained unchanged, with male employment rates continuing to outpace those of females, irrespective of marital status. This continuity highlights enduring structural gender imbalances in the Turkish labor market.</p>
+<p>Lastly,&nbsp;foreign trade data&nbsp;demonstrated steady growth in both exports and imports across all periods. However, the growth in imports consistently outpaced that of exports, resulting in a persistent and growing trade imbalance. This trend underscores Türkiye’s vulnerability to external supply chains and could have broader implications for macroeconomic stability, including inflation and currency valuation.</p>
+<p>In summary, the pandemic brought immediate disruptions, particularly in mortality and marriage behavior, but many structural patterns—including gender distributions, employment gaps, and trade deficits—remained largely unchanged. Notably, delayed life decisions (e.g., marriage), reduced fertility, and post-pandemic economic recovery emerge as key themes. These findings suggest that while COVID-19 had a profound short-term impact, many long-term trajectories in Turkish society and economy were only moderately altered.</p>
 
 
 </section>

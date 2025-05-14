@@ -15,6 +15,9 @@ The data sets that are used are from the TUIK. The below is the details of the s
 *-\> Here i will identify the libraries and the structure of the columns to be added later on.*
 
 ```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
 
 #Getting the libraries needed
 library(tidyverse)
@@ -41,7 +44,10 @@ The population data will be used to identify the population trends, detect if th
 *-\>Here i will import the population data then add the new predefined column and show what the dataset looks like*
 
 ```{r}
-#| echo: false
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 population_data <- read_excel("Data/population.xls")
 population_data <- add_covid_period(population_data)
 head(population_data)
@@ -55,7 +61,10 @@ The Marriage usually used as a symbol of happiness and hope. The increase of mar
 *-\>Here i will import the population data then add the new predefined column and show what the dataset looks like*
 
 ```{r}
-#| echo: false
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 marriages_data <- read_excel("Data/marriages.xlsx")
 marriages_data <- add_covid_period(marriages_data)
 head(marriages_data)
@@ -68,7 +77,10 @@ The average of the marriage along with the total amount of marriages in a countr
 *-\>Here i will import the average age of marriage data then add the new predefined column and show what the dataset looks like*
 
 ```{r}
-#| echo: false
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 marriages_age_data <- read_excel("Data/marriages_age.xlsx")
 marriages_age_data <- add_covid_period(marriages_age_data)
 head(marriages_age_data)
@@ -81,7 +93,10 @@ The birth statistics are important for a country since increasing the youth of a
 *-\>Here i will import the average age of marriage data then add the new predefined column and show what the dataset looks like*
 
 ```{r}
-#| echo: false
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 births_data <- read_excel("Data/births.xlsx")
 births_data <- add_covid_period(births_data)
 head(births_data)
@@ -94,7 +109,10 @@ This with the birth statics we can understand the distribution fo the population
 *-\>Here i will import the average age of marriage data then add the new predefined column and show what the dataset looks like*
 
 ```{r}
-#| echo: false
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 fertility_data <- read_excel("Data/fertility.xlsx")
 fertility_data <- add_covid_period(fertility_data)
 head(fertility_data)
@@ -107,7 +125,10 @@ The death is an important factor to understand the affects of the Covid-19 to un
 *-\>Here i will import the population data then add the new predefined column and show what the dataset looks like*
 
 ```{r}
-#| echo: false
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 deaths_data <- read_excel("Data/deaths.xlsx")
 deaths_data <- add_covid_period(deaths_data)
 head(deaths_data)
@@ -120,7 +141,10 @@ This is also one of the important aspect of a countries economical indicators. T
 *-\>Here i will import the population data then add the new predefined column and show what the dataset looks like*
 
 ```{r}
-#| echo: false
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 employment_data <- read_excel("Data/employment.xlsx")
 employment_data <- add_covid_period(employment_data)
 head(employment_data)
@@ -134,7 +158,10 @@ The exporting of goods and services has a similar indentations of the import. He
 *-\>Here i will import the population data then add the new predefined column and show what the dataset looks like*
 
 ```{r}
-#| echo: false
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 export_data <- read_excel("Data/export.xlsx")
 export_data <- add_covid_period(export_data)
 head(export_data)
@@ -147,7 +174,10 @@ The importing goods and services can mean that the country is not sufficiently p
 *-\>Here i will import the population data then add the new predefined column and show what the dataset looks like*
 
 ```{r}
-#| echo: false
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 import_data <- read_excel("Data/import.xlsx")
 import_data <- add_covid_period(import_data)
 head(import_data)
@@ -159,19 +189,33 @@ For the preprocessing of the data I used basic excel skills since i create the s
 
 # 3. Analysis
 
-Once we go through the data and the explanation of the data sets i will use. We can move on with the analysis. The analysis will mainly take 7 sections. These section will separately analyzed then a conclusion will be made for each section.
+Once we go through the data and the explanation of the data sets i will use. We can move on with the analysis. The analysis will mainly take 6 sections. These section will separately analyzed then a conclusion will be made for each section.
 
 ## 3.1 Population
 
+Understanding demographic changes is essential for evaluating the long-term effects of significant events like the COVID-19 pandemic. This section focuses on analyzing Türkiye's population data across the pre-COVID (2018–2019), during-COVID (2020–2022), and post-COVID (2023–2024) periods using city- and gender-level statistics.
+
+The summary table shows that Türkiye experienced a significant increase in population during the COVID period compared to the pre-COVID period. However, the growth rate declined in the post-COVID era, indicating a possible long-term demographic shift. This deceleration may reflect changes in migration, birth rates, or administrative adjustments.
+
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 population_summary <- population_data %>%
   group_by(CovidPeriod) %>% 
-  summarise(TotalPopulation = sum(Population, na.rm = TRUE), Count = n())
+  summarise(MeanPopulation = sum(Population, na.rm = TRUE)/(n()/162), Count = n())
 print(population_summary)
 
 ```
 
+Geographical distribution of population volumes across cities remained relatively stable throughout the periods. While most provinces showed consistent patterns, a few outlier cities displayed significant changes, possibly due to internal migration or policy-driven relocations during the pandemic.
+
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 
 ggplot(population_data, aes(x = CovidPeriod, y = Population, col = CovidPeriod)) +
   geom_point() + scale_y_log10(labels = comma) 
@@ -181,32 +225,58 @@ ggplot(population_data, aes(x = CovidPeriod, y = Population, col = CovidPeriod))
 
 ```
 
+In terms of gender distribution, the data suggests an almost 50-50 population split between men and women across all time periods. This indicates no gender-specific demographic shock during or after the pandemic.
+
 ```{r}
+#| echo: true
 #| message: false
 #| warning: false
+#| paged-print: false
 
 ggplot(population_data, aes(x = CovidPeriod, y = Population, col = Gender)) +
-  geom_point() + scale_y_log10(labels = comma) +
+  geom_boxplot() + scale_y_log10(labels = comma) +
   facet_wrap(~Gender) +
   labs(title = "Population by Gender and COVID Period")
 ```
 
+It can be said that the pandemic did not appear to alter Türkiye’s overall gender demographics or the distribution of population across most provinces. However, the slowdown in population growth in the post-COVID era is notable and warrants further investigation into underlying causes such as migration or fertility trends.
+
 ## 3.2 Marriage
 
+Marriage patterns offer valuable insights into societal behavior, particularly in times of socio-economic uncertainty. This section investigates the trends in marriage volumes and average marriage age in Türkiye over the defined COVID periods.
+
+The data clearly demonstrates that the number of marriages dropped significantly during the pandemic, likely due to strict government regulations, social distancing, and general uncertainty. Interestingly, the post-COVID period shows a marked rebound, surpassing even the pre-COVID levels. This suggests a "catch-up" effect where delayed marriages during the pandemic were actualized afterward.
+
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 marriage_summary <- na.omit(marriages_data) %>%
   group_by(CovidPeriod) %>%
-  summarise(MeanMarriages = mean(Marriages, na.rm = TRUE), Count = n())
+  summarise(MeanMarriages = mean(Marriages, na.rm = TRUE)/(n()/81), Count = n())
 print(marriage_summary)
 ```
 
+Despite these fluctuations in total numbers, annual averages of marriages appear consistent across years, indicating that the underlying societal inclination towards marriage may not have changed, only the timing.
+
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 ggplot(na.omit(marriages_data), aes(x = CovidPeriod, y = Marriages, fill = CovidPeriod)) +
-  geom_boxplot() + scale_y_log10()
+  geom_boxplot() + scale_y_log10(labels=comma)
   labs(title = "Marriage Count by COVID Period")
 ```
 
+Moreover, the average age at marriage has risen for both men and women by at least two years. This could be indicative of broader societal changes such as delayed adulthood, economic concerns, or educational prioritization.
+
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 ggplot(na.omit(marriages_age_data), aes(x = Gender, y = Average_Marriage_Age, fill = Gender)) +
   geom_boxplot() +
   facet_wrap(~CovidPeriod) +
@@ -214,31 +284,63 @@ ggplot(na.omit(marriages_age_data), aes(x = Gender, y = Average_Marriage_Age, fi
 
 ```
 
+Overall, the pandemic had a temporary suppressive effect on marriage events, but long-term marriage rates remain stable. However, the rising age of marriage signals a structural transformation in social norms.
+
 ## 3.4 Birth and Fertility
 
+The analysis of birth and fertility rates is crucial to assess generational continuity and public health. This section focuses on how these metrics evolved before, during, and after the COVID pandemic in Türkiye.
+
+In contrast to the decline in marriage numbers during the pandemic, birth rates actually increased. This counterintuitive finding could suggest that family planning behaviors shifted during lockdowns or that other socio-economic factors were at play. It is worth noting that the absence of 2024 data from TÜİK may slightly skew the post-COVID average downward.
+
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 birth_summary <- births_data %>%
   group_by(CovidPeriod) %>%
   summarise(TotalBirths = sum(Births, na.rm = TRUE), Count = n())
 print(birth_summary)
 ```
 
+Gender distribution in births remains consistent throughout all periods, mirroring the population statistics with near-equal ratios of boys and girls.
+
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 ggplot(births_data, aes(x = CovidPeriod, y = Births, fill = Gender_Baby)) +
   geom_boxplot() + scale_y_log10(labels = comma) +
   facet_wrap(~Gender_Baby) +
   labs(title = "Births by Baby Gender and COVID Period")
 ```
 
+However, fertility rates have steadily declined from 15 births per 1,000 women in the pre-COVID era to 11 in the post-COVID period. This trend may reflect delayed childbearing, economic uncertainties, or broader demographic transitions.
+
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 ggplot(na.omit(fertility_data), aes(x = CovidPeriod, y = Fertility_Rate, col = CovidPeriod)) +
   geom_point(size=5) +
   labs(title = "Fertility by COVID Period")
 ```
 
+In summary, although there was a temporary rise in births during the pandemic, Türkiye continues to face a long-term decline in fertility—a concern for future labor force and demographic sustainability.
+
 ## 3.5 Death
 
+Mortality trends provide a direct lens into public health crises. This section evaluates changes in total deaths, gender-specific mortality, and cause-of-death distributions over the COVID periods.
+
+As expected, the total number of deaths peaked significantly during the pandemic. This increase aligns with global mortality surges due to COVID-19 and strained healthcare systems.
+
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 death_summary <- deaths_data %>%
   group_by(CovidPeriod) %>%
   summarise(TotalDeaths = sum(Deaths_Amount, na.rm = TRUE), Count = n())
@@ -246,8 +348,13 @@ print(death_summary)
 
 ```
 
-```{r}
+Male mortality rates are consistently higher than female rates across all time periods. Interestingly, while male deaths return to near pre-COVID levels in the post-COVID period, female deaths slightly decrease compared to both earlier periods. This could suggest differences in resilience, healthcare access, or underlying conditions between genders.
 
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 ggplot(deaths_data, aes(x = CovidPeriod, y = Deaths_Amount, fill = Gender)) +
   geom_boxplot() + scale_y_log10(labels = comma)+
   facet_wrap(~Gender) +
@@ -256,16 +363,32 @@ ggplot(deaths_data, aes(x = CovidPeriod, y = Deaths_Amount, fill = Gender)) +
 
 ```
 
+Despite the surge in death counts, the distribution of causes of death remained largely unchanged. This suggests that COVID-related deaths may have been either recorded under existing ICD categories or did not displace other dominant causes.
+
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 ggplot(deaths_data, aes(x = Death_Reason, y = Deaths_Amount, col = Death_Reason)) +
   geom_point() +
   facet_wrap(~CovidPeriod) +
   labs(title = "Cause of Deaths by COVID Period") + theme(legend.position = "bottom")
 ```
 
+To conclude, while the pandemic caused a notable spike in mortality, its impact appears to have been temporary and gender-skewed. The consistency in cause-of-death categories may reflect either data classification limitations or resilient patterns in underlying mortality.
+
 ## 3.6 Employment
 
+The labor market response to major crises like COVID-19 can have long-lasting socio-economic consequences. This section analyzes employment rates by gender and marital status across COVID periods.
+
+Post-COVID, Türkiye experienced its highest employment rates across the observed timeline, possibly driven by economic recovery programs and adaptation to remote work structures.
+
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 employment_summary <- na.omit(employment_data) %>%
   group_by(CovidPeriod) %>%
   summarise(MeanEmployment = mean(Employment_Rate, na.rm = TRUE), Count = n())
@@ -274,16 +397,32 @@ print(employment_summary)
 
 ```
 
+Throughout all periods, male employment consistently exceeds that of females, regardless of marital status. These findings highlight persistent gender disparities in labor force participation, unaffected by the pandemic.
+
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 ggplot(na.omit(employment_data), aes(x = CovidPeriod, y = Employment_Rate, col = Gender)) +
   geom_point() +
   facet_wrap(~Status) +
   labs(title = "Employment Rate by Gender, Marital Status and COVID Period")
 ```
 
+To sum up, the pandemic did not significantly change employment structures by gender or marital status, but the post-COVID recovery appears to have brought higher overall employment levels.
+
 ## 3.7 Export and Import
 
+This section investigates Türkiye's international trade trends by analyzing export and import values over the COVID periods.
+
+Both export and import values show an increasing trend across all periods. However, the growth in import values consistently outpaces export growth. This widening trade imbalance could reflect supply chain dependencies, energy imports, or shifts in domestic consumption.
+
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 export_summary <- na.omit(export_data) %>%
   group_by(CovidPeriod) %>%
   summarise(MeanExport = mean(Export, na.rm = TRUE), Count = n())
@@ -293,6 +432,10 @@ print(export_summary)
 ```
 
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 import_summary <- na.omit(import_data) %>%
   group_by(CovidPeriod) %>%
   summarise(MeanImport = mean(Import, na.rm = TRUE), Count = n())
@@ -300,8 +443,13 @@ print(import_summary)
 
 ```
 
-```{r}
+Visualizations confirm this pattern, with both metrics showing upward trends, but imports displaying greater variance and higher average values.
 
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 ggplot(na.omit(export_data), aes(x = CovidPeriod, y = Export, fill = CovidPeriod)) +
   geom_boxplot() + scale_y_log10(labels = comma) +
   labs(title = "Export Amount by COVID Period")
@@ -310,9 +458,31 @@ ggplot(na.omit(export_data), aes(x = CovidPeriod, y = Export, fill = CovidPeriod
 ```
 
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| paged-print: false
 ggplot(na.omit(import_data), aes(x = CovidPeriod, y = Import, fill = CovidPeriod)) +
   geom_boxplot() + scale_y_log10 (labels = comma) +
   labs(title = "Import Amount by COVID Period")
 ```
 
+In conclusion, while Türkiye's international trade volumes increased steadily, the persistent import surplus suggests vulnerabilities that could affect currency valuation, inflation, and trade policy decisions.
+
 # 4. Results and Key Takeaways
+
+This analysis explored the multi-dimensional effects of the COVID-19 pandemic in Türkiye using official statistics from TÜİK, spanning population, marriage, birth and fertility, death, employment, and trade indicators. By comparing three distinct time periods—pre-COVID (2018–2019), during COVID (2020–2022), and post-COVID (2023–2024)—we captured both the immediate and residual impacts of the pandemic on social and economic indicators.
+
+Population data reveal that while Türkiye’s total population increased significantly during the COVID period, the post-COVID growth rate declined. Despite this change in pace, the distribution of population across provinces remained largely stable, except for a few outlier cities which experienced notable shifts. Gender composition of the population also remained consistent, maintaining a nearly 50-50 male-to-female ratio throughout all periods.
+
+In the domain of marriages, a sharp drop was observed during the pandemic, attributable to social restrictions and uncertainty. Interestingly, the number of marriages rebounded in the post-COVID period, exceeding pre-pandemic levels—likely reflecting deferred unions. Despite this temporal disruption, the average number of annual marriages remained stable across the years, suggesting unchanged social norms. Additionally, both men and women began marrying later, with average marriage age increasing by at least two years, potentially signaling deeper shifts in societal expectations and life planning.
+
+Contrary to marriage trends, birth rates increased during the COVID period. However, due to missing data for 2024, the overall post-COVID average appears lower. Gender distribution in births reflected the overall population structure, remaining balanced. Most notably, the fertility rate declined from 15 in the pre-COVID era to 11 in the post-COVID period, signaling a longer-term demographic concern regarding population replacement levels.
+
+Unsurprisingly, death rates surged during the COVID period, with male mortality consistently exceeding female mortality in all periods. Interestingly, while men's death counts returned to pre-COVID levels in the post-pandemic era, women experienced a slight reduction in mortality post-COVID. Despite fluctuations in volume, the patterns of causes of death remained consistent, suggesting that COVID-19 did not dramatically alter the leading underlying causes of death.
+
+In terms of employment, the highest average employment rate was observed in the post-COVID period, pointing to a strong economic recovery. However, gender disparities remained unchanged, with male employment rates continuing to outpace those of females, irrespective of marital status. This continuity highlights enduring structural gender imbalances in the Turkish labor market.
+
+Lastly, foreign trade data demonstrated steady growth in both exports and imports across all periods. However, the growth in imports consistently outpaced that of exports, resulting in a persistent and growing trade imbalance. This trend underscores Türkiye's vulnerability to external supply chains and could have broader implications for macroeconomic stability, including inflation and currency valuation.
+
+In summary, the pandemic brought immediate disruptions, particularly in mortality and marriage behavior, but many structural patterns—including gender distributions, employment gaps, and trade deficits—remained largely unchanged. Notably, delayed life decisions (e.g., marriage), reduced fertility, and post-pandemic economic recovery emerge as key themes. These findings suggest that while COVID-19 had a profound short-term impact, many long-term trajectories in Turkish society and economy were only moderately altered.
