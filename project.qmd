@@ -21,6 +21,7 @@ library(tidyverse)
 library(readxl)
 library(lubridate)
 library(ggplot2)
+library(scales)
 
 #structuring the Columns to include the new periods
 add_covid_period <- function(df) {
@@ -47,20 +48,7 @@ head(population_data)
 
 ```
 
-## **2- Education Level**
-
-Education level is related with the technological advancements of a country to analyze the root of its economy. Some countries can be tech driven while others are related with the service industries. Checking the trends of the educational level of the country can give us some idea of its economical drivers. Checking the periods education level will also give us clues on the changes in the Türkiye.
-
-*-\>Here i will import the population data then add the new predefined column and show what the dataset looks like*
-
-```{r}
-#| echo: false
-education_data <- read_excel("Data/education.xlsx")
-education_data <- add_covid_period(education_data)
-head(education_data)
-```
-
-## **3- Marriage Statistics**
+## **2- Marriage Statistics**
 
 The Marriage usually used as a symbol of happiness and hope. The increase of marriages usually means that there is a general happy period of a countries. With the trend of the marriages we can understand the welfare of the country, the unemployment rate of the youth and the populations age dsitribution.If the marriages are in a increase trend we can say that the economic conditions of the country is getting better. That's what we will be investşigating with this data set.
 
@@ -73,7 +61,7 @@ marriages_data <- add_covid_period(marriages_data)
 head(marriages_data)
 ```
 
-## **4- Average Age of Marriage**
+## **3- Average Age of Marriage**
 
 The average of the marriage along with the total amount of marriages in a country can show us the indebth details of the countries economic conditions. If the average age of marriage is decreasing we might say that the age distribution of the population is moving towards the youths.
 
@@ -86,7 +74,7 @@ marriages_age_data <- add_covid_period(marriages_age_data)
 head(marriages_age_data)
 ```
 
-## **5- Birth Statistics**
+## **4- Birth Statistics**
 
 The birth statistics are important for a country since increasing the youth of a country can push its growth further. The trends of the birth can means that the country will be increasing the youth population.
 
@@ -99,7 +87,7 @@ births_data <- add_covid_period(births_data)
 head(births_data)
 ```
 
-## **6- Fertility Rate**
+## **5- Fertility Rate**
 
 This with the birth statics we can understand the distribution fo the population much better.
 
@@ -112,7 +100,7 @@ fertility_data <- add_covid_period(fertility_data)
 head(fertility_data)
 ```
 
-## **7- Death Statistics**
+## **6- Death Statistics**
 
 The death is an important factor to understand the affects of the Covid-19 to understand if the rates have been increased or not during or after the pandemic compared to the pre-pandemic era. With this information we can understand our immune system as a population and understand is there is any incline of certain causes of death or are we back to pre-pandemic period.
 
@@ -125,7 +113,7 @@ deaths_data <- add_covid_period(deaths_data)
 head(deaths_data)
 ```
 
-## **8- Employment Data**
+## **7- Employment Data**
 
 This is also one of the important aspect of a countries economical indicators. The higher the employment rate the country's internal investment are distributed. Ideally a country wants to be %100 employed. This data will be used to analyze this situation.
 
@@ -139,7 +127,7 @@ head(employment_data)
 
 ```
 
-## **9- Export Data**
+## **8- Export Data**
 
 The exporting of goods and services has a similar indentations of the import. Here the increase in exports means that the country is well off şn the domestic side has sufficient diplomatic communicatin to be able to export its surplus. The trend of the exports also will give us the economical back ground of the Türkiye for the time period.
 
@@ -152,7 +140,7 @@ export_data <- add_covid_period(export_data)
 head(export_data)
 ```
 
-## **10- Import Data**
+## **9- Import Data**
 
 The importing goods and services can mean that the country is not sufficiently producing the goods that is imported. This can be a good sign of diplomacy meanwhile if a country is importing all of its good we can say that this country is economically dependent. With the trend of the imports we can see if Türkiye is getting more depended with its economy.
 
@@ -171,182 +159,160 @@ For the preprocessing of the data I used basic excel skills since i create the s
 
 # 3. Analysis
 
-Once we go through the data and the explanation of the data sets i will use. We can move on with the analysis. The analysis will mainly take 7 sections. These section will seperately analyzed then a conclusion will be made for each section.
+Once we go through the data and the explanation of the data sets i will use. We can move on with the analysis. The analysis will mainly take 7 sections. These section will separately analyzed then a conclusion will be made for each section.
 
 ## 3.1 Population
 
 ```{r}
 population_summary <- population_data %>%
-  group_by(CovidPeriod) %>%
-  summarise(MeanPopulation = mean(Population, na.rm = TRUE), Count = n())
+  group_by(CovidPeriod) %>% 
+  summarise(TotalPopulation = sum(Population, na.rm = TRUE), Count = n())
 print(population_summary)
 
 ```
 
-The first step of every analysis is to see the general view of the trend. Here we can see the increase of the population over time. With this view we can observe;
-
--   The overall population is increasing over the time period.
-
--   The increase of the pre-pandemic and during pandemic periods seems to be similar.
-
--   There is a drop of the incline of the population growth during the post-pandemic period.
-
 ```{r}
 
-population_summary <- population_data %>%
-  group_by(Year) %>%
-  summarise(TotalPopulation = sum(Population))
+ggplot(population_data, aes(x = CovidPeriod, y = Population, col = CovidPeriod)) +
+  geom_point() + scale_y_log10(labels = comma) 
+  labs(title = "Population Distribution by COVID Period")
 
-ggplot(population_summary, aes(x = Year, y = TotalPopulation)) +
-  geom_line(color = "red",linewidth = 1.5) +
-  scale_x_continuous(breaks = unique(population_summary$Year)) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(title = "Total Population Over Years", y = "Population", x = "Year")
 
 
 ```
-
-We need to dive in more with the population data. Lets see the population with the genders. Here we can see the males as blue and females as pink. the main observations from this graph is;
-
--   The growth trends of the male and female population is almost the same (there is no significant difference)
-
--   The male population is much higher than the female population. The possible reason for this situation will be analyzed on the next sections.
-
--   Even though the male population is above the female population we can see that the difference between the two genders is getting smaller each year. The possible causes for such a think can we answered once we analyzed the birth and the death data sets.
 
 ```{r}
 #| message: false
 #| warning: false
-gender_summary <- population_data %>% group_by(Year, Gender) %>% summarise(Population = sum(Population))
 
-ggplot(gender_summary, aes(x = Year, y = Population, color = Gender)) +
-  geom_line(size = 1.5) +
-  scale_color_manual(values = c("Erkek" = "#1f77b4", "Kadın" = "#e377c2")) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(title = "Population Trend by Gender", x = "Year", y = "Population")
-
+ggplot(population_data, aes(x = CovidPeriod, y = Population, col = Gender)) +
+  geom_point() + scale_y_log10(labels = comma) +
+  facet_wrap(~Gender) +
+  labs(title = "Population by Gender and COVID Period")
 ```
 
-Now lets analyze the population by province. Here we can see that the top %20 of the TR is giving the population differences. Lets check the top %20 much in depth.
+## 3.2 Marriage
 
 ```{r}
-
-top10_provinces <- population_data %>%
-  group_by(City) %>%
-  summarise(AveragePopulation = mean(Population)) %>%
-  arrange(desc(AveragePopulation)) %>%
-  slice_head(n = 81)
-
-ggplot(top10_provinces, aes(x = reorder(City, -AveragePopulation), y = AveragePopulation, fill = City)) +geom_col(show.legend = FALSE) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(title = "Cities by Average Population (2018–2024)", x = "City", y = "Average Population") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
+marriage_summary <- na.omit(marriages_data) %>%
+  group_by(CovidPeriod) %>%
+  summarise(MeanMarriages = mean(Marriages, na.rm = TRUE), Count = n())
+print(marriage_summary)
 ```
-
-The graph 2 shows a better details. I can say that the top 5 cities would be showing the most of the TRs affects. (Pareto principle) We can now go in depth with the top 5 cities over the year trends.
 
 ```{r}
-top10_provinces <- population_data %>%
-  group_by(City) %>%
-  summarise(AveragePopulation = mean(Population)) %>%
-  arrange(desc(AveragePopulation)) %>%
-  slice_head(n = 16)
-
-ggplot(top10_provinces, aes(x = reorder(City, -AveragePopulation), y = AveragePopulation, fill = City)) +geom_col(show.legend = FALSE) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(title = "Top 20% Provinces by Average Population (2018–2024)", x = "City", y = "Average Population") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ggplot(na.omit(marriages_data), aes(x = CovidPeriod, y = Marriages, fill = CovidPeriod)) +
+  geom_boxplot() + scale_y_log10()
+  labs(title = "Marriage Count by COVID Period")
 ```
-
-Except for İstanbul we can say that the population is almost increasing linearly. I see that the yearly trends of the Türkiye is depended on the Istanbul Population.
 
 ```{r}
-# Identify top 5 provinces by total population over all years
-top5_provinces <- population_data %>%
-  group_by(City) %>%
-  summarise(TotalPopulation = sum(Population)) %>%
-  arrange(desc(TotalPopulation)) %>%
-  slice_head(n = 5) %>%
-  pull(City)
+ggplot(na.omit(marriages_age_data), aes(x = Gender, y = Average_Marriage_Age, fill = Gender)) +
+  geom_boxplot() +
+  facet_wrap(~CovidPeriod) +
+  labs(title = "Average Marriage Age by Gender and COVID Period")
 
-# Filter the data for these top 5 provinces
-top5_trend_data <- population_data %>%
-  filter(City %in% top5_provinces) %>%
-  group_by(Year, City) %>%
-  summarise(Population = sum(Population), .groups = "drop")
-
-# Plot using facet_wrap by Province
-ggplot(top5_trend_data, aes(x = Year, y = Population)) +
-  geom_line(color = "#1f77b4", size = 1.5) +
-  facet_wrap(~ City, scales = "free_y") +
-  scale_y_continuous(labels = scales::comma) +
-  labs(title = "Yearly Population Trend of Top 5 Provinces", x = "Year", y = "Population") +
-  theme_minimal()
 ```
-
-Finally the Gender factor of the each City. We can see much different results compared to the Türkiye View.
-
-```{r}
-# Identify top 5 provinces by total population over all years
-top5_provinces <- population_data %>%
-  group_by(City) %>%
-  summarise(TotalPopulation = sum(Population)) %>%
-  arrange(desc(TotalPopulation)) %>%
-  slice_head(n = 5) %>%
-  pull(City)
-
-# Filter and prepare the data for these provinces, grouped by year and gender
-top5_gender_trend <- population_data %>%
-  filter(City %in% top5_provinces) %>%
-  group_by(Year, City, Gender) %>%
-  summarise(Population = sum(Population), .groups = "drop")
-
-# Plot using facet_wrap by Province, with line for each gender
-ggplot(top5_gender_trend, aes(x = Year, y = Population, color = Gender)) +
-  geom_line(size = 1.2) +
-  facet_wrap(~ City, scales = "free_y") +
-  scale_color_manual(values = c("Erkek" = "#1f77b4", "Kadın" = "#e377c2")) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(title = "Yearly Population Trend by Gender in Top 5 Provinces",
-       x = "Year", y = "Population", color = "Gender") +
-  theme_minimal()
-```
-
-## 3.2 Education
-
-```{r}
-education_summary <- education_data %>%
-  group_by(Year, Education_Level) %>%
-  summarise(Total = sum(Person), .groups = "drop")
-
-ggplot(education_summary, aes(x = Education_Level, y = Total, color = Education_Level, group = Education_Level)) +
-  geom_line(size = 1.2) +
-  facet_grid(~Year) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(
-    title = "Education Level Distribution by Year",
-    y = "Population",
-    x = "Education Level",
-    color = "Education Level"
-  ) +
-  theme_minimal()
-```
-
-## 3.3 Marriage
-
-xxxxxx
 
 ## 3.4 Birth and Fertility
 
+```{r}
+birth_summary <- births_data %>%
+  group_by(CovidPeriod) %>%
+  summarise(TotalBirths = sum(Births, na.rm = TRUE), Count = n())
+print(birth_summary)
+```
+
+```{r}
+ggplot(births_data, aes(x = CovidPeriod, y = Births, fill = Gender_Baby)) +
+  geom_boxplot() + scale_y_log10(labels = comma) +
+  facet_wrap(~Gender_Baby) +
+  labs(title = "Births by Baby Gender and COVID Period")
+```
+
+```{r}
+ggplot(na.omit(fertility_data), aes(x = CovidPeriod, y = Fertility_Rate, col = CovidPeriod)) +
+  geom_point(size=5) +
+  labs(title = "Fertility by COVID Period")
+```
+
 ## 3.5 Death
+
+```{r}
+death_summary <- deaths_data %>%
+  group_by(CovidPeriod) %>%
+  summarise(TotalDeaths = sum(Deaths_Amount, na.rm = TRUE), Count = n())
+print(death_summary)
+
+```
+
+```{r}
+
+ggplot(deaths_data, aes(x = CovidPeriod, y = Deaths_Amount, fill = Gender)) +
+  geom_boxplot() + scale_y_log10(labels = comma)+
+  facet_wrap(~Gender) +
+  labs(title = "Deaths by Gender and COVID Period")
+
+
+```
+
+```{r}
+ggplot(deaths_data, aes(x = Death_Reason, y = Deaths_Amount, col = Death_Reason)) +
+  geom_point() +
+  facet_wrap(~CovidPeriod) +
+  labs(title = "Cause of Deaths by COVID Period") + theme(legend.position = "bottom")
+```
 
 ## 3.6 Employment
 
+```{r}
+employment_summary <- na.omit(employment_data) %>%
+  group_by(CovidPeriod) %>%
+  summarise(MeanEmployment = mean(Employment_Rate, na.rm = TRUE), Count = n())
+print(employment_summary)
+
+
+```
+
+```{r}
+ggplot(na.omit(employment_data), aes(x = CovidPeriod, y = Employment_Rate, col = Gender)) +
+  geom_point() +
+  facet_wrap(~Status) +
+  labs(title = "Employment Rate by Gender, Marital Status and COVID Period")
+```
+
 ## 3.7 Export and Import
 
-xxxxxx
+```{r}
+export_summary <- na.omit(export_data) %>%
+  group_by(CovidPeriod) %>%
+  summarise(MeanExport = mean(Export, na.rm = TRUE), Count = n())
+print(export_summary)
+
+
+```
+
+```{r}
+import_summary <- na.omit(import_data) %>%
+  group_by(CovidPeriod) %>%
+  summarise(MeanImport = mean(Import, na.rm = TRUE), Count = n())
+print(import_summary)
+
+```
+
+```{r}
+
+ggplot(na.omit(export_data), aes(x = CovidPeriod, y = Export, fill = CovidPeriod)) +
+  geom_boxplot() + scale_y_log10(labels = comma) +
+  labs(title = "Export Amount by COVID Period")
+
+
+```
+
+```{r}
+ggplot(na.omit(import_data), aes(x = CovidPeriod, y = Import, fill = CovidPeriod)) +
+  geom_boxplot() + scale_y_log10 (labels = comma) +
+  labs(title = "Import Amount by COVID Period")
+```
 
 # 4. Results and Key Takeaways
-
-xxxxxx
